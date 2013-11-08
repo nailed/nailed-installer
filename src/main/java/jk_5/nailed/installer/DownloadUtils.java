@@ -1,24 +1,20 @@
 package jk_5.nailed.installer;
 
 import argo.jdom.JsonNode;
-import com.google.common.base.Charsets;
 import com.google.common.base.Function;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.common.hash.Hashing;
-import com.google.common.io.CharStreams;
 import com.google.common.io.Files;
 import com.google.common.io.InputSupplier;
 import org.tukaani.xz.XZInputStream;
 
-import javax.swing.*;
 import java.io.*;
 import java.net.URL;
 import java.net.URLConnection;
 import java.nio.charset.Charset;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.jar.JarEntry;
@@ -61,11 +57,11 @@ public class DownloadUtils {
                 monitor.setNote(String.format("Downloading library %s", libName));
                 libURL += pathName;
                 File packFile = new File(libPath.getParentFile(), libPath.getName() + PACK_NAME);
-                if (!downloadFile(libName, packFile, libURL + PACK_NAME, null)) {
+                if (!downloadFile(packFile, libURL + PACK_NAME, null)) {
                     if (library.isStringValue("url")) {
                         monitor.setNote(String.format("Trying unpacked library %s", libName));
                     }
-                    if (!downloadFile(libName, libPath, libURL, checksums)) {
+                    if (!downloadFile(libPath, libURL, checksums)) {
                         bad.add(libName);
                     } else {
                         grabbed.add(libName);
@@ -197,21 +193,7 @@ public class DownloadUtils {
         }
     }
 
-    public static List<String> downloadList(String libURL) {
-        try {
-            URL url = new URL(libURL);
-            URLConnection connection = url.openConnection();
-            connection.setConnectTimeout(5000);
-            connection.setReadTimeout(5000);
-            InputSupplier<InputStream> urlSupplier = new URLISSupplier(connection);
-            return CharStreams.readLines(CharStreams.newReaderSupplier(urlSupplier, Charsets.UTF_8));
-        } catch (Exception e) {
-            return Collections.emptyList();
-        }
-
-    }
-
-    public static boolean downloadFile(String libName, File libPath, String libURL, List<String> checksums) {
+    public static boolean downloadFile(File libPath, String libURL, List<String> checksums) {
         try {
             URL url = new URL(libURL);
             URLConnection connection = url.openConnection();
@@ -219,11 +201,7 @@ public class DownloadUtils {
             connection.setReadTimeout(5000);
             InputSupplier<InputStream> urlSupplier = new URLISSupplier(connection);
             Files.copy(urlSupplier, libPath);
-            if (checksumValid(libPath, checksums)) {
-                return true;
-            } else {
-                return false;
-            }
+            return checksumValid(libPath, checksums);
         } catch (FileNotFoundException fnf) {
             if (!libURL.endsWith(PACK_NAME)) {
                 fnf.printStackTrace();

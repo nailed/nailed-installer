@@ -62,7 +62,7 @@ public class InstallerPanel extends JPanel {
         tag.setAlignmentX(CENTER_ALIGNMENT);
         tag.setAlignmentY(CENTER_ALIGNMENT);
         logoSplash.add(tag);
-        tag = new JLabel(VersionInfo.getVersion());
+        tag = new JLabel(VersionInfo.getVersionTarget());
         tag.setAlignmentX(CENTER_ALIGNMENT);
         tag.setAlignmentY(CENTER_ALIGNMENT);
         logoSplash.add(tag);

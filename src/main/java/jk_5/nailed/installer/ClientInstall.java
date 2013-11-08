@@ -12,12 +12,8 @@ import com.google.common.io.Files;
 
 import javax.swing.*;
 import java.io.*;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
-import java.util.zip.ZipOutputStream;
 
 public class ClientInstall {
 
@@ -54,11 +50,9 @@ public class ClientInstall {
         try {
             VersionInfo.extractFile(clientJarFile, "/dummy.jar");
         } catch (IOException e1) {
-            JOptionPane.showMessageDialog(null, "You need to run the version " + VersionInfo.getMinecraftVersion() + " manually at least once", "Error", JOptionPane.ERROR_MESSAGE);
             return false;
         }
         File librariesDir = new File(target, "libraries");
-        File targetLibraryFile = VersionInfo.getLibraryPath(librariesDir);
         DownloadMonitor monitor = new DownloadMonitor();
         List<JsonNode> libraries = VersionInfo.getVersionInfo().getArrayNode("libraries");
         monitor.setMaximum(libraries.size() + 2);
@@ -74,16 +68,6 @@ public class ClientInstall {
             return false;
         }
 
-        if (!targetLibraryFile.getParentFile().mkdirs() && !targetLibraryFile.getParentFile().isDirectory()) {
-            if (!targetLibraryFile.getParentFile().delete()) {
-                JOptionPane.showMessageDialog(null, "There was a problem with the launcher version data. You will need to clear " + targetLibraryFile.getAbsolutePath() + " manually", "Error", JOptionPane.ERROR_MESSAGE);
-                return false;
-            } else {
-                targetLibraryFile.getParentFile().mkdirs();
-            }
-        }
-
-
         JsonRootNode versionJson = JsonNodeFactories.object(VersionInfo.getVersionInfo().getFields());
 
         try {
@@ -92,13 +76,6 @@ public class ClientInstall {
             newWriter.close();
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "There was a problem writing the launcher version data,  is it write protected?", "Error", JOptionPane.ERROR_MESSAGE);
-            return false;
-        }
-
-        try {
-            VersionInfo.extractFile(targetLibraryFile, "nailed.jar");
-        } catch (IOException e) {
-            JOptionPane.showMessageDialog(null, "There was a problem writing the system library file", "Error", JOptionPane.ERROR_MESSAGE);
             return false;
         }
 
@@ -114,9 +91,11 @@ public class ClientInstall {
             throw Throwables.propagate(e);
         }
 
+        File nailedGameDir = new File(launcherProfiles.getParentFile(), "Nailed");
 
         JsonField[] fields = new JsonField[]{
                 JsonNodeFactories.field("name", JsonNodeFactories.string("Nailed")),
+                JsonNodeFactories.field("gameDir", JsonNodeFactories.string(nailedGameDir.getAbsolutePath())),
                 JsonNodeFactories.field("lastVersionId", JsonNodeFactories.string(VersionInfo.getVersionTarget())),
         };
 
@@ -141,24 +120,6 @@ public class ClientInstall {
         return true;
     }
 
-    private static byte[] readEntry(ZipFile inFile, ZipEntry entry) throws IOException {
-        return readFully(inFile.getInputStream(entry));
-    }
-
-    private static byte[] readFully(InputStream stream) throws IOException {
-        byte[] data = new byte[4096];
-        ByteArrayOutputStream entryBuffer = new ByteArrayOutputStream();
-        int len;
-        do {
-            len = stream.read(data);
-            if (len > 0) {
-                entryBuffer.write(data, 0, len);
-            }
-        } while (len != -1);
-
-        return entryBuffer.toByteArray();
-    }
-
     public boolean isPathValid(File targetDir) {
         if (targetDir.exists()) {
             File launcherProfiles = new File(targetDir, "launcher_profiles.json");
@@ -177,6 +138,6 @@ public class ClientInstall {
     }
 
     public String getSuccessMessage() {
-        return String.format("Successfully installed client profile Nailed for version %s into launcher and grabbed %d required libraries", VersionInfo.getVersion(), grabbed.size());
+        return String.format("Successfully installed client profile Nailed for version %s into launcher and grabbed %d required libraries", VersionInfo.getVersionTarget(), grabbed.size());
     }
 }

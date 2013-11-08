@@ -33,6 +33,7 @@ public class SimpleInstaller {
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (Exception e) {
+            //NOOP
         }
 
         InstallerPanel panel = new InstallerPanel(targetDir);

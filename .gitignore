@@ -1,6 +1,9 @@
 .gradle
 build
 out
+repo
 *.iml
 *.ipr
 *.iws
+keystore.jks
+gradle.properties

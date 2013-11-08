@@ -45,7 +45,7 @@ public class InstallerPanel extends JPanel {
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         BufferedImage image;
         try {
-            image = ImageIO.read(SimpleInstaller.class.getResourceAsStream("/big_logo.png"));
+            image = ImageIO.read(SimpleInstaller.class.getResourceAsStream("/nailed.png"));
         } catch (IOException e) {
             throw Throwables.propagate(e);
         }

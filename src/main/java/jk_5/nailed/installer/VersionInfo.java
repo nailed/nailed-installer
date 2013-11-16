@@ -10,6 +10,8 @@ import com.google.common.io.Files;
 import com.google.common.io.OutputSupplier;
 
 import java.io.*;
+import java.net.URL;
+import java.net.URLConnection;
 
 public class VersionInfo {
 
@@ -17,11 +19,13 @@ public class VersionInfo {
     public final JsonRootNode versionData;
 
     public VersionInfo() {
-        InputStream installProfile = getClass().getResourceAsStream("/install_profile.json");
         JdomParser parser = new JdomParser();
-
         try {
-            versionData = parser.parse(new InputStreamReader(installProfile, Charsets.UTF_8));
+            URLConnection conn = new URL("http://maven.reening.nl/nailed/launcherProfile.json").openConnection();
+            conn.setConnectTimeout(5000);
+            conn.setReadTimeout(5000);
+            versionData = parser.parse(new InputStreamReader(conn.getInputStream(), Charsets.UTF_8));
+            conn.getInputStream().close();
         } catch (Exception e) {
             throw Throwables.propagate(e);
         }

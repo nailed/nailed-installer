@@ -11,7 +11,9 @@ import com.google.common.collect.Maps;
 import com.google.common.io.Files;
 
 import javax.swing.*;
-import java.io.*;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 
@@ -91,7 +93,7 @@ public class ClientInstall {
             throw Throwables.propagate(e);
         }
 
-        File nailedGameDir = new File(launcherProfiles.getParentFile(), "Nailed");
+        File nailedGameDir = new File(new File(launcherProfiles.getParentFile(), "Nailed"), "runtime");
 
         JsonField[] fields = new JsonField[]{
                 JsonNodeFactories.field("name", JsonNodeFactories.string("Nailed")),

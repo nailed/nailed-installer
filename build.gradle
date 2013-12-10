@@ -8,8 +8,8 @@ repositories {
 }
 
 group = 'jk_5.nailed'
-archivesBaseName = 'installer'
-version = '1.0'
+archivesBaseName = 'Nailed-Installer'
+version = '1.1'
 targetCompatibility = '1.6'
 sourceCompatibility = '1.6'
 
@@ -37,9 +37,9 @@ task fatJar(type: Jar, dependsOn: jar) {
             attributes 'Main-Class': 'jk_5.nailed.installer.SimpleInstaller'
         }
     }
-    doLast {
-        ant.signjar(jar: fatJar.archivePath, alias: 'Nailed', keystore: nailedKeystoreLocation, storepass: nailedKeystorePassword)
-    }
+    //doLast {
+    //    ant.signjar(jar: fatJar.archivePath, alias: 'Nailed', keystore: nailedKeystoreLocation, storepass: nailedKeystorePassword)
+    //}
 }
 
 artifacts {
@@ -51,9 +51,9 @@ jar {
     manifest {
         attributes 'Main-Class': 'jk_5.nailed.installer.SimpleInstaller'
     }
-    doLast {
-        ant.signjar(jar: jar.archivePath, alias: 'Nailed', keystore: nailedKeystoreLocation, storepass: nailedKeystorePassword)
-    }
+    //doLast {
+    //    ant.signjar(jar: jar.archivePath, alias: 'Nailed', keystore: nailedKeystoreLocation, storepass: nailedKeystorePassword)
+    //}
 }
 
 uploadArchives {

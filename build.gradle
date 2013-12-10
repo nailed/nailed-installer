@@ -25,17 +25,13 @@ dependencies {
 }
 
 jar {
-    inputs.file jar.archivePath
     from(configurations.compile.collect {
         zipTree(it).matching {
             include '**/*.class'
         }
     })
-    doFirst {
-        from zipTree(jar.archivePath)
-        manifest {
-            attributes 'Main-Class': 'jk_5.nailed.installer.SimpleInstaller'
-        }
+    manifest {
+        attributes 'Main-Class': 'jk_5.nailed.installer.SimpleInstaller'
     }
     //doLast {
     //    ant.signjar(jar: jar.archivePath, alias: 'Nailed', keystore: nailedKeystoreLocation, storepass: nailedKeystorePassword)

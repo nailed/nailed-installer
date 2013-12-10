@@ -1,7 +1,5 @@
 package jk_5.nailed.installer;
 
-import com.google.common.base.Throwables;
-
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
@@ -23,14 +21,14 @@ public class InstallerPanel extends JPanel {
         private static final long serialVersionUID = 1L;
 
         @Override
-        public void actionPerformed(ActionEvent e) {
+        public void actionPerformed(ActionEvent e){
             JFileChooser dirChooser = new JFileChooser();
             dirChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
             dirChooser.setFileHidingEnabled(false);
             dirChooser.ensureFileIsVisible(targetDir);
             dirChooser.setSelectedFile(targetDir);
             int response = dirChooser.showOpenDialog(InstallerPanel.this);
-            switch (response) {
+            switch(response){
                 case JFileChooser.APPROVE_OPTION:
                     targetDir = dirChooser.getSelectedFile();
                     updateFilePath();
@@ -41,13 +39,13 @@ public class InstallerPanel extends JPanel {
         }
     }
 
-    public InstallerPanel(File targetDir) {
+    public InstallerPanel(File targetDir){
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         BufferedImage image;
-        try {
+        try{
             image = ImageIO.read(SimpleInstaller.class.getResourceAsStream("/nailed.png"));
-        } catch (IOException e) {
-            throw Throwables.propagate(e);
+        }catch(IOException e){
+            throw new RuntimeException(e);
         }
 
         JPanel logoSplash = new JPanel();
@@ -109,31 +107,31 @@ public class InstallerPanel extends JPanel {
     }
 
 
-    private void updateFilePath() {
-        try {
+    private void updateFilePath(){
+        try{
             targetDir = targetDir.getCanonicalFile();
             selectedDirText.setText(targetDir.getPath());
-        } catch (IOException e) {
+        }catch(IOException e){
             //NOOP
         }
 
-        if (SimpleInstaller.install.isPathValid(targetDir)) {
+        if(SimpleInstaller.install.isPathValid(targetDir)){
             selectedDirText.setForeground(Color.BLACK);
             infoLabel.setVisible(false);
             fileEntryPanel.setBorder(null);
-        } else {
+        }else{
             selectedDirText.setForeground(Color.RED);
             fileEntryPanel.setBorder(new LineBorder(Color.RED));
             infoLabel.setText("<html>" + SimpleInstaller.install.getFileError(targetDir) + "</html>");
             infoLabel.setVisible(true);
         }
-        if (dialog != null) {
+        if(dialog != null){
             dialog.invalidate();
             dialog.pack();
         }
     }
 
-    public void run() {
+    public void run(){
         JOptionPane optionPane = new JOptionPane(this, JOptionPane.PLAIN_MESSAGE, JOptionPane.OK_CANCEL_OPTION);
 
         Frame emptyFrame = new Frame("Nailed installer");
@@ -144,12 +142,13 @@ public class InstallerPanel extends JPanel {
         dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
         dialog.setVisible(true);
         int result = (Integer) (optionPane.getValue() != null ? optionPane.getValue() : -1);
-        if (result == JOptionPane.OK_OPTION) {
+        if(result == JOptionPane.OK_OPTION){
             if(SimpleInstaller.install.run(targetDir)){
                 JOptionPane.showMessageDialog(null, SimpleInstaller.install.getSuccessMessage(), "Complete", JOptionPane.INFORMATION_MESSAGE);
             }
         }
         dialog.dispose();
         emptyFrame.dispose();
+        System.exit(0);
     }
 }

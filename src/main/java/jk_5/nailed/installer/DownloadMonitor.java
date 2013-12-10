@@ -17,20 +17,20 @@ public class DownloadMonitor {
         monitor.setMillisToDecideToPopup(0);
     }
 
-    public void setMaximum(int max) {
+    public void setMaximum(int max){
         monitor.setMaximum(max);
     }
 
-    public void setNote(String note) {
+    public void setNote(String note){
         System.out.println(note);
         monitor.setNote(note);
     }
 
-    public void setProgress(int progress) {
+    public void setProgress(int progress){
         monitor.setProgress(progress);
     }
 
-    public void close() {
+    public void close(){
         monitor.close();
     }
 }

@@ -9,30 +9,30 @@ public class SimpleInstaller {
 
     public static ClientInstall install = new ClientInstall();
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException{
         String userHomeDir = System.getProperty("user.home", ".");
         String osType = System.getProperty("os.name").toLowerCase(Locale.ENGLISH);
         File targetDir;
         String mcDir = ".minecraft";
-        if (osType.contains("win") && System.getenv("APPDATA") != null) {
+        if(osType.contains("win") && System.getenv("APPDATA") != null){
             targetDir = new File(System.getenv("APPDATA"), mcDir);
-        } else if (osType.contains("mac")) {
+        }else if(osType.contains("mac")){
             targetDir = new File(new File(new File(userHomeDir, "Library"), "Application Support"), "minecraft");
-        } else {
+        }else{
             targetDir = new File(userHomeDir, mcDir);
         }
 
-        try {
+        try{
             VersionInfo.getVersionTarget();
-        } catch (Throwable e) {
+        }catch(Throwable e){
             e.printStackTrace();
             JOptionPane.showMessageDialog(null, "Corrupt download detected, cannot install", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
-        try {
+        try{
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        } catch (Exception e) {
+        }catch(Exception e){
             //NOOP
         }
 

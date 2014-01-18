@@ -41,7 +41,7 @@ jar {
 uploadArchives {
     repositories.mavenDeployer {
         configuration = configurations.deployerJars
-        repository(url: "scp://maven.reening.nl/media/maven/") {
+        repository(url: "scp://maven.reening.nl/var/maven/") {
             authentication(userName: mavenUsername, password: mavenPassword)
         }
     }

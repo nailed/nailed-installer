@@ -88,14 +88,17 @@ public class ClientInstall {
             throw Throwables.propagate(e);
         }
 
-        File nailedGameDir = new File(new File(launcherProfiles.getParentFile(), "Nailed"), "runtime");
+        File nailedGameDir = new File(new File(new File(launcherProfiles.getParentFile(), "Nailed"), "runtime"), "172");
+        nailedGameDir.mkdirs();
+
+        String profileName = "Nailed";
 
         JsonObject nailedProfile = new JsonObject();
-        nailedProfile.addProperty("name", "Nailed");
+        nailedProfile.addProperty("name", profileName);
         nailedProfile.addProperty("gameDir", nailedGameDir.getAbsolutePath());
         nailedProfile.addProperty("lastVersionId", VersionInfo.getVersionTarget());
 
-        jsonProfileData.getAsJsonObject("profiles").add("Nailed", nailedProfile);
+        jsonProfileData.getAsJsonObject("profiles").add(profileName, nailedProfile);
 
         try{
             BufferedWriter newWriter = Files.newWriter(launcherProfiles, Charsets.UTF_8);

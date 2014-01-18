@@ -88,7 +88,7 @@ public class ClientInstall {
             throw Throwables.propagate(e);
         }
 
-        File nailedGameDir = new File(new File(new File(launcherProfiles.getParentFile(), "Nailed"), "runtime"), "172");
+        File nailedGameDir = new File(new File(launcherProfiles.getParentFile(), "Nailed"), "runtime");
         nailedGameDir.mkdirs();
 
         String profileName = "Nailed";

@@ -9,7 +9,7 @@ repositories {
 
 group = 'jk_5.nailed'
 archivesBaseName = 'Nailed-Installer'
-version = '1.1'
+version = '1.2'
 targetCompatibility = '1.6'
 sourceCompatibility = '1.6'
 
@@ -39,10 +39,50 @@ jar {
 }
 
 uploadArchives {
-    repositories.mavenDeployer {
-        configuration = configurations.deployerJars
-        repository(url: "scp://maven.reening.nl/var/maven/") {
-            authentication(userName: mavenUsername, password: mavenPassword)
+    if (project.hasProperty("deploymaven")) {
+        logger.lifecycle('Deploying to file server')
+        repositories.mavenDeployer {
+            configuration = configurations.deployerJars
+            repository(url: project.deploymaven.url) {
+                authentication(userName: project.deploymaven.username, password: project.deploymaven.password)
+            }
+            pom {
+                groupId = project.group
+                version = project.version
+                artifactId = project.archivesBaseName
+                project {
+                    name = project.archivesBaseName
+                    packaging = 'jar'
+                    description = 'Installer for Nailed client profiles'
+                    url = 'https://github.com/nailed/nailed-installer'
+
+                    scm {
+                        url 'https://github.com/nailed/nailed-installer'
+                        connection 'scm:git:git://github.com/nailed/nailed-installer.git'
+                        developerConnection 'scm:git:git@github.com:nailed/nailed-installer.git'
+                    }
+
+                    issueManagement {
+                        system 'github'
+                        url 'https://github.com/nailed/nailed-installer/issues'
+                    }
+
+                    developers {
+                        developer {
+                            id = 'jk-5'
+                            name = 'jk-5'
+                            roles {
+                                role 'developer'
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }else{
+        logger.lifecycle('Deploying to mavenLocal')
+        repositories{
+            mavenLocal()
         }
     }
 }

@@ -1,13 +1,10 @@
 package jk_5.nailed.installer;
 
 import com.google.common.base.Charsets;
-import com.google.common.io.ByteStreams;
-import com.google.common.io.Files;
-import com.google.common.io.OutputSupplier;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
-import java.io.*;
+import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
 
@@ -35,11 +32,5 @@ public class VersionInfo {
 
     public static JsonObject getVersionInfo(){
         return INSTANCE.versionData;
-    }
-
-    public static void extractFile(File path, String file) throws IOException{
-        InputStream inputStream = VersionInfo.class.getResourceAsStream(file);
-        OutputSupplier<FileOutputStream> outputSupplier = Files.newOutputStreamSupplier(path);
-        ByteStreams.copy(inputStream, outputSupplier);
     }
 }

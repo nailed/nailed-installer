@@ -4,4 +4,6 @@ jdk:
   - openjdk7
   - openjdk6
 notifications:
-  irc: "irc.reening.nl#server"
+  webhooks:
+  - http://n.tkte.ch/h/2336/2m6yWVtDsUupON8dAhYNb66z
+script: TERM=dumb gradle build

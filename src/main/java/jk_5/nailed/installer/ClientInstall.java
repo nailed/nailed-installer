@@ -10,8 +10,12 @@ import com.google.gson.*;
 import javax.swing.*;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
+import java.util.jar.Attributes;
+import java.util.jar.JarOutputStream;
+import java.util.jar.Manifest;
 
 public class ClientInstall {
 
@@ -46,7 +50,9 @@ public class ClientInstall {
         File versionJsonFile = new File(versionTarget, VersionInfo.getVersionTarget() + ".json");
         File clientJarFile = new File(versionTarget, VersionInfo.getVersionTarget() + ".jar");
         try{
-            VersionInfo.extractFile(clientJarFile, "/dummy.jar");
+            Manifest manifest = new Manifest();
+            manifest.getMainAttributes().put(Attributes.Name.MANIFEST_VERSION, "1.0");
+            new JarOutputStream(new FileOutputStream(clientJarFile), manifest).close();
         }catch(IOException e1){
             return false;
         }

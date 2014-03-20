@@ -33,9 +33,12 @@ jar {
     manifest {
         attributes 'Main-Class': 'jk_5.nailed.installer.SimpleInstaller'
     }
-    //doLast {
-    //    ant.signjar(jar: jar.archivePath, alias: 'Nailed', keystore: nailedKeystoreLocation, storepass: nailedKeystorePassword)
-    //}
+    if(project.hasProperty("nailedKeystoreLocation")){
+        doLast {
+            logger.lifecycle("Signing jar")
+            ant.signjar(jar: jar.archivePath, alias: 'Nailed', keystore: nailedKeystoreLocation, storepass: nailedKeystorePassword)
+        }
+    }
 }
 
 uploadArchives {

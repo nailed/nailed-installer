@@ -31,7 +31,7 @@ jar {
         }
     })
     manifest {
-        attributes 'Main-Class': 'jk_5.nailed.installer.SimpleInstaller'
+        attributes 'Main-Class': 'jk_5.nailed.installer.Installer'
     }
     if(project.hasProperty("nailedKeystoreLocation")){
         doLast {

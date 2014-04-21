@@ -16,8 +16,8 @@ object Installer extends App {
   val gson = new GsonBuilder().setPrettyPrinting().create()
   val minecraftHome = {
     val userHome = Properties.propOrElse("user.home", ".")
-    if(Properties.isWin && Properties.propIsSet("APPDATA")){
-      new File(Properties.propOrNull("APPDATA"), ".minecraft")
+    if(Properties.isWin && System.getenv("APPDATA") != null){
+      new File(System.getenv("APPDATA"), ".minecraft")
     }else if(Properties.isMac){
       new File(new File(new File(userHome, "Library"), "Application Support"), "minecraft")
     }else{

@@ -7,6 +7,7 @@ import scala.collection.JavaConversions._
 import java.util.concurrent.CountDownLatch
 import com.google.gson.{JsonParseException, JsonParser, JsonObject}
 import java.util.concurrent.atomic.AtomicInteger
+import java.util.zip.ZipEntry
 
 /**
  * No description given
@@ -61,7 +62,9 @@ object InstallTaskClient extends InstallTask {
     //Generate a dummy jar. We load minecraft as a library
     val manifest = new Manifest
     manifest.getMainAttributes.put(Attributes.Name.MANIFEST_VERSION, "1.0")
-    new JarOutputStream(new FileOutputStream(new File(versionTarget, libList.versionName + ".jar"))).close()
+    val jos = new JarOutputStream(new FileOutputStream(new File(versionTarget, libList.versionName + ".jar")))
+    jos.putNextEntry(new ZipEntry("dummyEntry"))
+    jos.close()
 
     val latch = new CountDownLatch(libList.libraries.size())
     val monitor = new DownloadMonitor

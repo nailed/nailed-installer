@@ -24,11 +24,12 @@ trait InstallTask {
     try{
       this.run()
     }catch{
-      case AbortInstallException => return false
+      case AbortInstallException => false
       case e: Exception =>
+        e.printStackTrace()
         JOptionPane.showMessageDialog(null, "An error has occurred while installing nailed. See the log for details", "An error has occured", JOptionPane.ERROR_MESSAGE)
         sys.exit(0)
-        return false
+        false
     }
   }
 
